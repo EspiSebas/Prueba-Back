@@ -16,15 +16,9 @@ import lombok.Setter;
 public class CarResponseDto {
     private Long id;
     private String brand;
-    private int model;
-    private String year;
+    private String model;
+    private int year;
     private String  numberPlate;
     private String color;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    public CarResponseDto(Long id, String brand, int model, String year, String numberPlate, String color) {
-    }
 }

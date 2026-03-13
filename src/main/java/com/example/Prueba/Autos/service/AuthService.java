@@ -5,8 +5,10 @@ import com.example.Prueba.Autos.dto.auth.RegisterDto;
 import com.example.Prueba.Autos.entity.User;
 import com.example.Prueba.Autos.repository.UserRepository;
 import com.example.Prueba.Autos.security.JwtService;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class AuthService {
@@ -34,12 +36,11 @@ public class AuthService {
 
     public String login(LoginDto loginDto){
         User user = userRepository.findByEmail(loginDto.getEmail())
-                .orElseThrow(()-> new RuntimeException("User not found"));
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"User not found"));
 
 
         if(!passwordEncoder.matches(loginDto.getPassword(),user.getPassword())){
-            throw new RuntimeException("Invalid Credentials");
-
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid Credentials");
         }
 
         return jwtService.generateToken(user.getEmail());
